@@ -181,14 +181,6 @@ window.addEventListener("click", (e) => {
     }
 });
 
-document.getElementById("btn-modo-prueba").addEventListener("click", (e) => {
-    modoPrueba = !modoPrueba;
-    e.target.textContent = modoPrueba
-        ? "Volver a bloquear según la hora"
-        : "Modo Prueba (Desbloquear todo)";
-    actualizarRelojes();
-});
-
 inicializarTarjetas();
 actualizarRelojes();
 setInterval(actualizarRelojes, 1000);
