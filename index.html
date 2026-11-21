@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¡Felices 50 Años! - Sorpresas del Día</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <header class="hero">
+        <div class="badge">EDICIÓN ESPECIAL</div>
+        <h1>50 Años de Historia</h1>
+        <p class="subtitle">Hoy es un día inolvidable. Cada 3 horas se desbloqueará un nuevo código QR con una sorpresa para ti, hasta el gran final de las 21:00.</p>
+        <div id="reloj-actual" class="reloj-actual">Cargando hora...</div>
+    </header>
+
+    <main class="timeline-container" id="qr-container">
+        <!-- Las 5 tarjetas de QR se generan desde script.js -->
+    </main>
+
+    <!-- Ventana emergente para el texto y vídeo final de las 21:00 -->
+    <div id="modal-sorpresa" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" id="close-modal">&times;</span>
+            <div class="modal-icon">🥂</div>
+            <h2 id="modal-titulo">¡Feliz 50 Cumpleaños!</h2>
+            <p id="modal-texto"></p>
+            <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-video">Ver Vídeo Final 🎬</a>
+        </div>
+    </div>
+
+    <footer>
+        <p>Hecho con cariño por tus 50 años ✨</p>
+        <button id="btn-modo-prueba" class="btn-test">Modo Prueba (Desbloquear todo)</button>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
