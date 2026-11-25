@@ -3,7 +3,7 @@
 // =========================================================================
 
 // Fecha de mañana en formato "AAAA-MM-DD"
-const FECHA_EVENTO = "2026-11-26";
+const FECHA_EVENTO = "2026-11-25";
 
 // 5 Códigos QR cada 3 horas: 09:00, 12:00, 15:00, 18:00 y 21:00
 const momentos = [
