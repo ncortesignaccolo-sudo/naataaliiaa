@@ -329,4 +329,14 @@ QR #${item.id} DE 5
 
 ${item.titulo}
 ${item.descripcion}
+🔒
+--:--:--
+para desbloquear
 
+
+
+${item.mensajeDesbloqueado}
+${item.esFinal
+? <button class="btn-action" onclick="abrirModalFinal(${item.id})">Leer Texto y Ver Vídeo ✨</button>
+: <a href="${item.qrContenido}" target="_blank" rel="noopener noreferrer" class="btn-action">Abrir Enlace ↗</a>
+}
