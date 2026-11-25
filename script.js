@@ -1,9 +1,9 @@
-// =========================================================================
+// =======================================================================
 // CONFIGURACIÓN DEL EVENTO (EDITA ESTOS DATOS)
 // =========================================================================
 
-// Fecha en formato "AAAA-MM-DD"
-const FECHA_EVENTO = "2026-11-21";
+// Fecha de mañana en formato "AAAA-MM-DD"
+const FECHA_EVENTO = "2026-11-26";
 
 // 5 Códigos QR cada 3 horas: 09:00, 12:00, 15:00, 18:00 y 21:00
 const momentos = [
@@ -48,7 +48,6 @@ const momentos = [
         hora: "21:00",
         titulo: "Capítulo 5: Vídeo y Mensaje Final",
         descripcion: "El broche de oro a tus 50 años.",
-        // Texto que aparecerá en el móvil al escanear el QR final
         qrContenido: "¡FELICES 50 AÑOS! Gracias por cada momento, cada risa y por hacer estos 50 años tan especiales.",
         mensajeDesbloqueado: "✨ ¡FELICES 50 AÑOS! ✨\nLlegaron las 21:00: este es el QR final con tu mensaje conmemorativo y el acceso al vídeo.",
         textoModal: "¡FELICES 50 AÑOS!\n\nGracias por ser una persona tan importante en nuestras vidas, por cada consejo, cada abrazo y cada recuerdo compartido. ¡Por muchos años más celebrándote!",
@@ -169,6 +168,16 @@ function abrirModalFinal(id) {
     }
 
     modal.classList.remove("hidden");
+}
+
+// Botón Modo Prueba (protegido para que no dé error si luego lo borras del HTML)
+const btnPrueba = document.getElementById("btn-modo-prueba");
+if (btnPrueba) {
+    btnPrueba.addEventListener("click", () => {
+        modoPrueba = !modoPrueba;
+        btnPrueba.textContent = modoPrueba ? "Volver al modo normal" : "Modo Prueba (Desbloquear todo)";
+        actualizarRelojes();
+    });
 }
 
 document.getElementById("close-modal").addEventListener("click", () => {
