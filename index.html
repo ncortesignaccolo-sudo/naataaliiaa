@@ -283,4 +283,50 @@
                 id: 3,
                 horaNum: 15,
                 horaTexto: "15:00",
+                titulo: "Capítulo 3: Sobremesa",
+                descripcion: "Alguien tiene algo que decirte.",
+
+                qrContenido: "google.com",
+mensajeDesbloqueado: "¡Hora de sobremesa! Toca abrir la tercera sorpresa.",
+esFinal: false
+},
+{
+id: 4,
+horaNum: 18,
+horaTexto: "18:00",
+titulo: "Capítulo 4: La Cuenta Atrás",
+descripcion: "Ya queda poco para el gran momento de las 21:00.",
+qrContenido: "google.com",
+mensajeDesbloqueado: "La tarde avanza y el gran final está a la vuelta de la esquina.",
+esFinal: false
+},
+{
+id: 5,
+horaNum: 21,
+horaTexto: "21:00",
+titulo: "Capítulo 5: Vídeo y Mensaje Final",
+descripcion: "El broche de oro a tus 50 años.",
+qrContenido: "¡FELICES 50 AÑOS! Gracias por cada momento, cada risa y por hacer estos 50 años tan especiales.",
+mensajeDesbloqueado: "✨ ¡FELICES 50 AÑOS! ✨\nLlegaron las 21:00: este es el QR final con tu mensaje conmemorativo y el acceso al vídeo.",
+textoModal: "¡FELICES 50 AÑOS!\n\nGracias por ser una persona tan importante en nuestras vidas, por cada consejo, cada abrazo y cada recuerdo compartido. ¡Por muchos años más celebrándote!",
+urlVideoFinal: "google.com",
+esFinal: true
+}
+];
+let modoPrueba = false;
+const container = document.getElementById("qr-container");
+const modal = document.getElementById("modal-sorpresa");
+function inicializarTarjetas() {
+container.innerHTML = "";
+momentos.forEach((item) => {
+const card = document.createElement("article");
+card.className = qr-card locked ${item.esFinal ? "final-special" : ""};
+card.id = card-${item.id};
+card.innerHTML = `
+
+QR #${item.id} DE 5
+🕒 ${item.horaTexto}h
+
+${item.titulo}
+${item.descripcion}
 
