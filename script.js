@@ -21,7 +21,7 @@ const momentos = [
         hora: "12:00",
         titulo: "Capítulo 2: Años Dorados",
         descripcion: "Un pequeño viaje al pasado...",
-        qrContenido: "https://ejemplo.com/sorpresa-1200",
+        qrContenido: "https://drive.google.com/drive/folders/1Yn4UfO9zPLxE7Z1gALIh-LCwo2cweRHM",
         mensajeDesbloqueado: "Llega el mediodía: escanea este QR para descubrir el segundo detalle.",
         esFinal: false
     },
@@ -30,7 +30,7 @@ const momentos = [
         hora: "15:00",
         titulo: "Capítulo 3: Sobremesa",
         descripcion: "Alguien tiene algo que decirte.",
-        qrContenido: "https://ejemplo.com/sorpresa-1500",
+        qrContenido: "https://drive.google.com/drive/folders/12qwEI-mZA19GFSgx-nZ6iPYkQW2rKQMe",
         mensajeDesbloqueado: "¡Hora de sobremesa! Toca abrir la tercera sorpresa.",
         esFinal: false
     },
@@ -39,7 +39,7 @@ const momentos = [
         hora: "18:00",
         titulo: "Capítulo 4: La Cuenta Atrás",
         descripcion: "Ya queda poco para el gran momento de las 21:00.",
-        qrContenido: "https://ejemplo.com/sorpresa-1800",
+        qrContenido: "https://drive.google.com/drive/folders/1i0ICDaOtsEAonuOiw1KXDwAEZCUmbif2",
         mensajeDesbloqueado: "La tarde avanza y el gran final está a la vuelta de la esquina.",
         esFinal: false
     },
@@ -51,7 +51,7 @@ const momentos = [
         qrContenido: "¡FELICES 50 AÑOS! Gracias por cada momento, cada risa y por hacer estos 50 años tan especiales.",
         mensajeDesbloqueado: "✨ ¡FELICES 50 AÑOS! ✨\nLlegaron las 21:00: este es el QR final con tu mensaje conmemorativo y el acceso al vídeo.",
         textoModal: "¡FELICES 50 AÑOS!\n\nGracias por ser una persona tan importante en nuestras vidas, por cada consejo, cada abrazo y cada recuerdo compartido. ¡Por muchos años más celebrándote!",
-        urlVideoFinal: "https://ejemplo.com/video-final-50",
+        urlVideoFinal: "https://drive.google.com/drive/folders/18I_tWNMIPqEnd_UBEGXDaWIvJJrKs69s",
         esFinal: true
     }
 ];
