@@ -1,225 +1,146 @@
-// =========================================================================
-// CONFIGURACIÓN DEL EVENTO: 25 DE NOVIEMBRE DE 2026
-// =========================================================================
+// 1. CONFIGURACIÓN DEL EVENTO (Fecha: Año-Mes-Día)
+const FECHA_CUMPLEANOS = "2026-11-26"; 
 
-const ANIO = 2026;
-const MES = 10; // En JavaScript los meses van de 0 a 11 (10 = Noviembre)
-const DIA = 25;
-
-const momentos = [
+const sorpresas = [
     {
-        id: 1,
-        horaNum: 9,
         hora: "09:00",
         titulo: "Capítulo 1: El Despertar",
         descripcion: "Para empezar tus 50 años con una sonrisa.",
-        qrContenido: "https://google.com",
-        mensajeDesbloqueado: "¡Buenos días! Hoy cumples 50 años y empieza tu día de sorpresas.",
-        esFinal: false
+        urlVideo: "https://AQUI-TU-ENLACE-VIDEO-1.com"
     },
     {
-        id: 2,
-        horaNum: 12,
         hora: "12:00",
-        titulo: "Capítulo 2: Años Dorados",
-        descripcion: "Un pequeño viaje al pasado...",
-        qrContenido: "https://google.com",
-        mensajeDesbloqueado: "Llega el mediodía: escanea este QR para descubrir el segundo detalle.",
-        esFinal: false
+        titulo: "Capítulo 2: El Aperitivo",
+        descripcion: "Un recuerdo muy especial a media mañana.",
+        urlVideo: "https://AQUI-TU-ENLACE-VIDEO-2.com"
     },
     {
-        id: 3,
-        horaNum: 15,
         hora: "15:00",
         titulo: "Capítulo 3: Sobremesa",
-        descripcion: "Alguien tiene algo que decirte.",
-        qrContenido: "https://google.com",
-        mensajeDesbloqueado: "¡Hora de sobremesa! Toca abrir la tercera sorpresa.",
-        esFinal: false
+        descripcion: "Personas que no querían perderse este día.",
+        urlVideo: "https://AQUI-TU-ENLACE-VIDEO-3.com"
     },
     {
-        id: 4,
-        horaNum: 18,
         hora: "18:00",
-        titulo: "Capítulo 4: La Cuenta Atrás",
-        descripcion: "Ya queda poco para el gran momento de las 21:00.",
-        qrContenido: "https://google.com",
-        mensajeDesbloqueado: "La tarde avanza y el gran final está a la vuelta de la esquina.",
-        esFinal: false
+        titulo: "Capítulo 4: La Tarde",
+        descripcion: "Seguimos celebrando medio siglo de historias.",
+        urlVideo: "https://AQUI-TU-ENLACE-VIDEO-4.com"
     },
     {
-        id: 5,
-        horaNum: 21,
         hora: "21:00",
-        titulo: "Capítulo 5: Vídeo y Mensaje Final",
-        descripcion: "El broche de oro a tus 50 años.",
-        qrContenido: "¡FELICES 50 AÑOS! Gracias por cada momento, cada risa y por hacer estos 50 años tan especiales.",
-        mensajeDesbloqueado: "✨ ¡FELICES 50 AÑOS! ✨\nLlegaron las 21:00: este es el QR final con tu mensaje conmemorativo y el acceso al vídeo.",
-        textoModal: "¡FELICES 50 AÑOS!\n\nGracias por ser una persona tan importante en nuestras vidas, por cada consejo, cada abrazo y cada recuerdo compartido. ¡Por muchos años más celebrándote!",
-        urlVideoFinal: "https://google.com",
-        esFinal: true
+        titulo: "Capítulo 5: El Gran Final",
+        descripcion: "El broche de oro para un día inolvidable.",
+        urlVideo: "https://AQUI-TU-ENLACE-VIDEO-5.com",
+        esFinal: true,
+        textoModal: "¡Muchísimas felicidades por estos 50 años! Aquí tienes la última sorpresa del día."
     }
 ];
 
-// =========================================================================
-// LÓGICA DE CUENTA ATRÁS Y DESBLOQUEO
-// =========================================================================
-
 let modoPrueba = false;
+const qrGenerados = {};
+
+// 2. CREAR LAS TARJETAS EN PANTALLA
 const container = document.getElementById("qr-container");
-const modal = document.getElementById("modal-sorpresa");
 
-function inicializarTarjetas() {
-    if (!container) return;
-    container.innerHTML = "";
-
-    momentos.forEach((item) => {
-        const card = document.createElement("article");
-        card.className = `qr-card locked ${item.esFinal ? "final-special" : ""}`;
-        card.id = `card-${item.id}`;
-
-        card.innerHTML = `
-            <div class="card-header">
-                <span class="step-number">QR #${item.id} DE 5</span>
-                <span class="unlock-time">🕒 ${item.hora}h</span>
+sorpresas.forEach((item, index) => {
+    const card = document.createElement("div");
+    card.className = "qr-card";
+    card.innerHTML = `
+        <div class="card-header">
+            <span>QR #${index + 1} DE ${sorpresas.length}</span>
+            <span>🕒 ${item.hora}h</span>
+        </div>
+        <h2>${item.titulo}</h2>
+        <p>${item.descripcion}</p>
+        <div class="qr-box" id="box-${index}">
+            <div class="lock-overlay" id="lock-${index}">
+                <div class="lock-icon">🔒</div>
+                <div class="countdown" id="timer-${index}">00:00:00</div>
+                <small>PARA DESBLOQUEAR</small>
             </div>
-            <h3>${item.titulo}</h3>
-            <p class="desc">${item.descripcion}</p>
+            <div id="qrcode-${index}" style="display:none;"></div>
+        </div>
+    `;
+    container.appendChild(card);
+});
 
-            <div class="qr-wrapper">
-                <div id="qrcode-${item.id}" class="qr-code-box"></div>
-                <div class="lock-overlay" id="overlay-${item.id}">
-                    <div class="lock-icon">🔒</div>
-                    <div class="countdown" id="timer-${item.id}">--:--:--</div>
-                    <div class="countdown-label">para desbloquear</div>
-                </div>
-            </div>
-
-            <div id="unlocked-info-${item.id}" style="display: none;">
-                <div class="unlocked-message">${item.mensajeDesbloqueado}</div>
-                ${item.esFinal
-                    ? `<button class="btn-action" onclick="abrirModalFinal(${item.id})">Leer Texto y Ver Vídeo ✨</button>`
-                    : `<a href="${item.qrContenido}" target="_blank" rel="noopener noreferrer" class="btn-action">Abrir Enlace ↗</a>`
-                }
-            </div>
-        `;
-
-        container.appendChild(card);
-
-        if (typeof QRCode !== "undefined") {
-            new QRCode(document.getElementById(`qrcode-${item.id}`), {
-                text: item.qrContenido,
-                width: 180,
-                height: 180,
-                colorDark: "#000000",
-                colorLight: "#ffffff",
-                correctLevel: QRCode.CorrectLevel.M
-            });
-        }
-    });
-}
-
-function formatearTiempo(ms) {
-    if (ms <= 0) return "00:00:00";
-    const totalSegundos = Math.floor(ms / 1000);
-    const horas = Math.floor(totalSegundos / 3600);
-    const minutos = Math.floor((totalSegundos % 3600) / 60);
-    const segundos = totalSegundos % 60;
-
-    return [horas, minutos, segundos]
-        .map(v => v < 10 ? "0" + v : v)
-        .join(":");
-}
-
-function actualizarRelojes() {
+// 3. CONTROL DEL RELOJ Y DESBLOQUEO
+function actualizarTodo() {
     const ahora = new Date();
     const relojEl = document.getElementById("reloj-actual");
     if (relojEl) {
-        relojEl.textContent = `Hora actual: ${ahora.toLocaleTimeString("es-ES")}`;
+        relojEl.textContent = ahora.toLocaleTimeString("es-ES");
     }
 
-    momentos.forEach((item) => {
-        const fechaObjetivo = new Date(ANIO, MES, DIA, item.horaNum, 0, 0);
-        const diferencia = fechaObjetivo.getTime() - ahora.getTime();
+    sorpresas.forEach((item, index) => {
+        const fechaObjetivo = new Date(`${FECHA_CUMPLEANOS}T${item.hora}:00`);
+        const diferencia = fechaObjetivo - ahora;
 
-        const card = document.getElementById(`card-${item.id}`);
-        const overlay = document.getElementById(`overlay-${item.id}`);
-        const unlockedInfo = document.getElementById(`unlocked-info-${item.id}`);
-        const timerEl = document.getElementById(`timer-${item.id}`);
-
-        if (!card || !overlay || !unlockedInfo || !timerEl) return;
+        const lockEl = document.getElementById(`lock-${index}`);
+        const qrEl = document.getElementById(`qrcode-${index}`);
+        const timerEl = document.getElementById(`timer-${index}`);
 
         if (diferencia <= 0 || modoPrueba) {
-            card.classList.remove("locked");
-            card.classList.add("unlocked");
-            overlay.style.display = "none";
-            unlockedInfo.style.display = "block";
+            // Desbloquear y dibujar QR
+            lockEl.style.display = "none";
+            qrEl.style.display = "block";
+
+            if (!qrGenerados[index]) {
+                new QRCode(qrEl, {
+                    text: item.urlVideo,
+                    width: 180,
+                    height: 180
+                });
+                qrGenerados[index] = true;
+
+                // Si es el final, activar ventana emergente al hacer clic
+                if (item.esFinal) {
+                    qrEl.style.cursor = "pointer";
+                    qrEl.addEventListener("click", () => abrirModalFinal(item));
+                }
+            }
         } else {
-            card.classList.add("locked");
-            card.classList.remove("unlocked");
-            overlay.style.display = "flex";
-            unlockedInfo.style.display = "none";
-            timerEl.textContent = formatearTiempo(diferencia);
+            // Mantener bloqueado y actualizar cuenta atrás
+            lockEl.style.display = "flex";
+            qrEl.style.display = "none";
+
+            const horas = Math.floor(diferencia / (1000 * 60 * 60));
+            const minutos = Math.floor((diferencia / (1000 * 60)) % 60);
+            const segundos = Math.floor((diferencia / 1000) % 60);
+
+            timerEl.textContent = 
+                String(horas).padStart(2, "0") + ":" +
+                String(minutos).padStart(2, "0") + ":" +
+                String(segundos).padStart(2, "0");
         }
     });
 }
 
-function abrirModalFinal(id) {
-    const item = momentos.find(m => m.id === id);
-    if (!item || !modal) return;
-
-    document.getElementById("modal-titulo").textContent = item.titulo;
-    document.getElementById("modal-texto").textContent = item.textoModal || item.qrContenido;
-
-    const btnLink = document.getElementById("modal-link");
-    if (item.urlVideoFinal) {
-        btnLink.href = item.urlVideoFinal;
-        btnLink.style.display = "inline-block";
-    } else {
-        btnLink.style.display = "none";
-    }
-
-    modal.classList.remove("hidden");
-}
-
-// Botón Modo Prueba (funciona si está en el HTML y no da error si lo borras)
+// 4. BOTÓN DE MODO PRUEBA Y MODAL FINAL
 const btnPrueba = document.getElementById("btn-modo-prueba");
 if (btnPrueba) {
     btnPrueba.addEventListener("click", () => {
         modoPrueba = !modoPrueba;
         btnPrueba.textContent = modoPrueba ? "Volver al modo normal" : "Modo Prueba (Desbloquear todo)";
-        actualizarRelojes();
+        actualizarTodo();
     });
 }
 
-// Truco secreto: 5 toques en "EDICIÓN ESPECIAL" activan/desactivan el modo prueba aunque borres el botón
-let toques = 0;
-const badgeEl = document.querySelector(".badge");
-if (badgeEl) {
-    badgeEl.addEventListener("click", () => {
-        toques++;
-        if (toques >= 5) {
-            modoPrueba = !modoPrueba;
-            toques = 0;
-            actualizarRelojes();
-        }
+function abrirModalFinal(item) {
+    const modal = document.getElementById("modal-sorpresa");
+    document.getElementById("modal-titulo").textContent = item.titulo;
+    document.getElementById("modal-texto").textContent = item.textoModal;
+    document.getElementById("modal-link").href = item.urlVideo;
+    modal.classList.remove("hidden");
+}
+
+const closeModal = document.getElementById("close-modal");
+if (closeModal) {
+    closeModal.addEventListener("click", () => {
+        document.getElementById("modal-sorpresa").classList.add("hidden");
     });
 }
 
-const closeBtn = document.getElementById("close-modal");
-if (closeBtn && modal) {
-    closeBtn.addEventListener("click", () => {
-        modal.classList.add("hidden");
-    });
-}
-
-window.addEventListener("click", (e) => {
-    if (e.target === modal) {
-        modal.classList.add("hidden");
-    }
-});
-
-inicializarTarjetas();
-actualizarRelojes();
-setInterval(actualizarRelojes, 1000);
-document.addEventListener("visibilitychange", actualizarRelojes);
+// Iniciar reloj cada segundo
+setInterval(actualizarTodo, 1000);
+actualizarTodo();
