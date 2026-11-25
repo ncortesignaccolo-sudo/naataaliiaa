@@ -1,342 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡Felices 50 Años! - Sorpresas del Día</title>
-    <script src="https://cloudflare.com"></script>
-    <link href="https://googleapis.com" rel="stylesheet">
-    <style>
-        :root {
-            --bg-dark: #0f1115;
-            --card-bg: #181b22;
-            --gold: #d4af37;
-            --gold-light: #f3e5ab;
-            --text-main: #f4f4f6;
-            --text-muted: #9ca3af;
-            --locked-overlay: rgba(15, 17, 21, 0.85);
-        }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-            background-color: var(--bg-dark);
-            color: var(--text-main);
-            font-family: 'Poppins', sans-serif;
-            line-height: 1.6;
-            padding-bottom: 50px;
-        }
-        .hero {
-            text-align: center;
-            padding: 50px 20px 30px;
-            background: radial-gradient(circle at top, #232732 0%, var(--bg-dark) 70%);
-            border-bottom: 1px solid rgba(212, 175, 55, 0.2);
-        }
-        .badge {
-            display: inline-block;
-            padding: 5px 14px;
-            border: 1px solid var(--gold);
-            color: var(--gold);
-            border-radius: 20px;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            margin-bottom: 15px;
-            user-select: none;
-        }
-        .hero h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.8rem;
-            color: var(--gold-light);
-            margin-bottom: 10px;
-        }
-        .subtitle {
-            max-width: 550px;
-            margin: 0 auto 20px;
-            color: var(--text-muted);
-            font-size: 0.95rem;
-        }
-        .reloj-actual {
-            font-size: 0.85rem;
-            color: var(--gold);
-            background: rgba(212, 175, 55, 0.1);
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 8px;
-        }
-        .timeline-container {
-            max-width: 480px;
-            margin: 40px auto;
-            padding: 0 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 35px;
-            position: relative;
-        }
-        .timeline-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 2px;
-            background: linear-gradient(to bottom, transparent, rgba(212, 175, 55, 0.3), transparent);
-            transform: translateX(-50%);
-            z-index: 0;
-        }
-        .qr-card {
-            background: var(--card-bg);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            border-radius: 18px;
-            padding: 25px;
-            text-align: center;
-            position: relative;
-            z-index: 1;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-        }
-        .qr-card.unlocked { border-color: var(--gold); }
-        .qr-card.final-special {
-            background: linear-gradient(145deg, #1d1a12, #181b22);
-            border: 2px solid var(--gold);
-            box-shadow: 0 0 25px rgba(212, 175, 55, 0.2);
-        }
-        .card-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            font-size: 0.85rem;
-        }
-        .step-number { color: var(--gold); font-weight: 600; letter-spacing: 1px; }
-        .unlock-time {
-            background: rgba(255, 255, 255, 0.06);
-            padding: 4px 10px;
-            border-radius: 6px;
-            color: var(--text-muted);
-        }
-        .qr-card h3 {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
-            margin-bottom: 8px;
-            color: #fff;
-        }
-        .qr-card p.desc { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 20px; }
-        .qr-wrapper {
-            position: relative;
-            width: 210px;
-            height: 210px;
-            margin: 0 auto 15px;
-            background: #ffffff;
-            padding: 15px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .qr-code-box img { display: block; width: 100%; height: 100%; }
-        .qr-card.locked .qr-code-box { filter: blur(12px); opacity: 0.25; pointer-events: none; }
-        .lock-overlay {
-            position: absolute;
-            inset: 0;
-            background: var(--locked-overlay);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            color: var(--gold-light);
-            backdrop-filter: blur(4px);
-        }
-        .lock-icon { font-size: 2rem; margin-bottom: 8px; }
-        .countdown {
-            font-family: monospace;
-            font-size: 1.25rem;
-            font-weight: bold;
-            color: var(--gold);
-            letter-spacing: 1px;
-        }
-        .countdown-label {
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            margin-top: 4px;
-        }
-        .unlocked-message {
-            margin-top: 15px;
-            padding: 12px;
-            background: rgba(212, 175, 55, 0.12);
-            border-left: 3px solid var(--gold);
-            border-radius: 6px;
-            font-size: 0.9rem;
-            color: var(--gold-light);
-            text-align: left;
-            white-space: pre-line;
-        }
-        .btn-action {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 10px 22px;
-            background: var(--gold);
-            color: #000;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            border: none;
-            cursor: pointer;
-        }
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.85);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            z-index: 100;
-        }
-        .modal.hidden { display: none; }
-        .modal-content {
-            background: var(--card-bg);
-            border: 2px solid var(--gold);
-            border-radius: 20px;
-            max-width: 450px;
-            width: 100%;
-            padding: 35px 25px;
-            text-align: center;
-            position: relative;
-        }
-        .close-btn {
-            position: absolute;
-            top: 15px;
-            right: 20px;
-            font-size: 1.8rem;
-            color: var(--text-muted);
-            cursor: pointer;
-        }
-        .modal-icon { font-size: 3rem; margin-bottom: 10px; }
-        .modal-content h2 { font-family: 'Playfair Display', serif; color: var(--gold-light); margin-bottom: 15px; }
-        .modal-content p { font-size: 0.95rem; color: var(--text-main); margin-bottom: 25px; white-space: pre-line; }
-        .btn-video {
-            display: inline-block;
-            padding: 12px 25px;
-            background: var(--gold);
-            color: #000;
-            font-weight: 600;
-            text-decoration: none;
-            border-radius: 10px;
-        }
-        footer { text-align: center; margin-top: 50px; color: var(--text-muted); font-size: 0.85rem; }
-    </style>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>¡Felices 50 Años! - Sorpresas del Día</title>
+ <link rel="stylesheet" href="style.css">
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+ <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <header class="hero">
-        <div class="badge" id="secret-trigger">EDICIÓN ESPECIAL</div>
-        <h1>50 Años de Historia</h1>
-        <p class="subtitle">Hoy es un día inolvidable. Cada 3 horas se desbloqueará un nuevo código QR con una sorpresa para ti, hasta el gran final de las 21:00.</p>
-        <div id="reloj-actual" class="reloj-actual">Cargando hora...</div>
-    </header>
+ <header class="hero">
+ <div class="badge">EDICIÓN ESPECIAL</div>
+ <h1>50 Años de Historia</h1>
+ <p class="subtitle">Hoy es un día inolvidable. Cada 3 horas se desbloqueará un nuevo código QR con una sorpresa para ti, hasta el gran final de las 21:00.</p>
+ <div id="reloj-actual" class="reloj-actual">Cargando hora...</div>
+ </header>
 
-    <main class="timeline-container" id="qr-container"></main>
+ <main class="timeline-container" id="qr-container">
+ <!-- Las 5 tarjetas de QR se generan desde script.js -->
+ </main>
 
-    <div id="modal-sorpresa" class="modal hidden">
-        <div class="modal-content">
-            <span class="close-btn" id="close-modal">&times;</span>
-            <div class="modal-icon">🥂</div>
-            <h2 id="modal-titulo">¡Feliz 50 Cumpleaños!</h2>
-            <p id="modal-texto"></p>
-            <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-video">Ver Vídeo Final 🎬</a>
-        </div>
-    </div>
+ <!-- Ventana emergente para el texto y vídeo final de las 21:00 -->
+ <div id="modal-sorpresa" class="modal hidden">
+ <div class="modal-content">
+ <span class="close-btn" id="close-modal">&times;</span>
+ <div class="modal-icon">🥂</div>
+ <h2 id="modal-titulo">¡Feliz 50 Cumpleaños!</h2>
+ <p id="modal-texto"></p>
+ <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-video">Ver Vídeo Final 🎬</a>
+ </div>
+ </div>
 
-    <footer>
-        <p>Hecho con cariño por tus 50 años ✨</p>
-    </footer>
+ <footer>
+ <p>Hecho con cariño por tus 50 años ✨</p>
+ <button id="btn-modo-prueba" class="btn-test">Modo Prueba (Desbloquear todo)</button>
+ </footer>
 
-    <script>
-        // Fecha exacta: 25 de Noviembre de 2026 (en JavaScript los meses van de 0 a 11, por eso 10 = Noviembre)
-        const ANIO = 2026;
-        const MES = 10; 
-        const DIA = 25;
-
-        const momentos = [
-            {
-                id: 1,
-                horaNum: 9,
-                horaTexto: "09:00",
-                titulo: "Capítulo 1: El Despertar",
-                descripcion: "Para empezar tus 50 años con una sonrisa.",
-                qrContenido: "https://google.com",
-                mensajeDesbloqueado: "¡Buenos días! Hoy cumples 50 años y empieza tu día de sorpresas.",
-                esFinal: false
-            },
-            {
-                id: 2,
-                horaNum: 12,
-                horaTexto: "12:00",
-                titulo: "Capítulo 2: Años Dorados",
-                descripcion: "Un pequeño viaje al pasado...",
-                qrContenido: "https://google.com",
-                mensajeDesbloqueado: "Llega el mediodía: escanea este QR para descubrir el segundo detalle.",
-                esFinal: false
-            },
-            {
-                id: 3,
-                horaNum: 15,
-                horaTexto: "15:00",
-                titulo: "Capítulo 3: Sobremesa",
-                descripcion: "Alguien tiene algo que decirte.",
-
-                qrContenido: "google.com",
-mensajeDesbloqueado: "¡Hora de sobremesa! Toca abrir la tercera sorpresa.",
-esFinal: false
-},
-{
-id: 4,
-horaNum: 18,
-horaTexto: "18:00",
-titulo: "Capítulo 4: La Cuenta Atrás",
-descripcion: "Ya queda poco para el gran momento de las 21:00.",
-qrContenido: "google.com",
-mensajeDesbloqueado: "La tarde avanza y el gran final está a la vuelta de la esquina.",
-esFinal: false
-},
-{
-id: 5,
-horaNum: 21,
-horaTexto: "21:00",
-titulo: "Capítulo 5: Vídeo y Mensaje Final",
-descripcion: "El broche de oro a tus 50 años.",
-qrContenido: "¡FELICES 50 AÑOS! Gracias por cada momento, cada risa y por hacer estos 50 años tan especiales.",
-mensajeDesbloqueado: "✨ ¡FELICES 50 AÑOS! ✨\nLlegaron las 21:00: este es el QR final con tu mensaje conmemorativo y el acceso al vídeo.",
-textoModal: "¡FELICES 50 AÑOS!\n\nGracias por ser una persona tan importante en nuestras vidas, por cada consejo, cada abrazo y cada recuerdo compartido. ¡Por muchos años más celebrándote!",
-urlVideoFinal: "google.com",
-esFinal: true
-}
-];
-let modoPrueba = false;
-const container = document.getElementById("qr-container");
-const modal = document.getElementById("modal-sorpresa");
-function inicializarTarjetas() {
-container.innerHTML = "";
-momentos.forEach((item) => {
-const card = document.createElement("article");
-card.className = qr-card locked ${item.esFinal ? "final-special" : ""};
-card.id = card-${item.id};
-card.innerHTML = `
-
-QR #${item.id} DE 5
-🕒 ${item.horaTexto}h
-
-${item.titulo}
-${item.descripcion}
-🔒
---:--:--
-para desbloquear
-
-
-
-${item.mensajeDesbloqueado}
-${item.esFinal
-? <button class="btn-action" onclick="abrirModalFinal(${item.id})">Leer Texto y Ver Vídeo ✨</button>
-: <a href="${item.qrContenido}" target="_blank" rel="noopener noreferrer" class="btn-action">Abrir Enlace ↗</a>
-}
+ <script src="script.js"></script>
+</body>
+</html> 
