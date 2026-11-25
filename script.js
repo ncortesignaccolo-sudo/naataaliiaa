@@ -12,7 +12,7 @@ const momentos = [
         hora: "09:00",
         titulo: "Capítulo 1: El Despertar",
         descripcion: "Para empezar tus 50 años con una sonrisa.",
-        qrContenido: "https://youtube.com/shorts/RPeeRQ07qsA",
+        qrContenido: "https://youtube.com/shorts/RPeeRQ07qsA?feature=share",
         mensajeDesbloqueado: "¡Buenos días! Hoy cumples 50 años y empieza tu día de sorpresas.",
         esFinal: false
     },
